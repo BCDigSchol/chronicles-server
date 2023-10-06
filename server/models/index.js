@@ -31,6 +31,11 @@ db.sequelize = sequelize;
 
 // make models available for reference by controllers
 db.users = require('./user.model.js')(sequelize, Sequelize);
+db.publications = require('./publication.model.js')(sequelize, Sequelize);
+db.authors = require('./author.model.js')(sequelize, Sequelize);
+db.authorsOfPublications = require('./authorOfPublication.model.js')(sequelize, Sequelize);
+db.genres = require('./genre.model.js')(sequelize, Sequelize);
+db.narrations = require('./narration.model.js')(sequelize, Sequelize);
 
 // call association functions on all models and set fk constraints
 Object.keys(db).forEach(modelName => {

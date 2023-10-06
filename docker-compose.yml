@@ -50,48 +50,48 @@ services:
       volumes:
         - ./nginx:/etc/nginx/conf.d
         # if developing locally, comment out web-root, certbot, and dhparam volumes
-        # - web-root:/var/www/html
-        # - certbot-etc:/etc/letsencrypt
-        # - certbot-var:/var/lib/letsencrypt
-        # - ./certbot/www:/var/www/certbot/:ro
-        # - ./dhparam:/etc/ssl/certs
+        - web-root:/var/www/html
+        - certbot-etc:/etc/letsencrypt
+        - certbot-var:/var/lib/letsencrypt
+        - ./certbot/www:/var/www/certbot/:ro
+        - ./dhparam:/etc/ssl/certs
       depends_on:
         - nodejs
       networks:
         - server-network
     # if developing locally, comment out certbot service
-    # certbot:
-      # image: certbot/certbot
-      # container_name: certbot
-      # volumes:
-        # - certbot-etc:/etc/letsencrypt
-        # - certbot-var:/var/lib/letsencrypt
-        # - ./certbot/www/:/var/www/certbot/:rw
-        # - web-root:/var/www/html
-      # depends_on:
-        # - webserver
+    certbot:
+      image: certbot/certbot
+      container_name: certbot
+      volumes:
+        - certbot-etc:/etc/letsencrypt
+        - certbot-var:/var/lib/letsencrypt
+        - ./certbot/www/:/var/www/certbot/:rw
+        - web-root:/var/www/html
+      depends_on:
+        - webserver
       # PUT YOUR EMAIL AND DOMAIN NAME BELOW
     #  command: certonly --webroot --webroot-path /var/www/html/ --email sample@your_domain --agree-tos --no-eff-email -d your_domain -d www.your_domain
 
 volumes:
   db:
   # if developing locally, comment out the certbot-*, and dhparam, and web-root volumes (and subheadings)
-  # certbot-etc:
-  # certbot-var:
-  # dhparam:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
+  certbot-etc:
+  certbot-var:
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
       # PUT YOUR USERNAME / PROJECT FOLDER BELOW
-  #     device: /home/YOUR_USERNAME/chronicles-server/dhparam/
-  #     o: bind
-  # web-root:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
+      device: /home/YOUR_USERNAME/chronicles-server/dhparam/
+      o: bind
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
       # PUT YOUR USER NAME / PROJECT FOLDER BELOW
-  #     device: /home/YOUR_USERNAME/chronicles-server/server/pages/
-   #    o: bind
+      device: /home/YOUR_USERNAME/chronicles-server/server/pages/
+      o: bind
 
 networks:
     server-network:
