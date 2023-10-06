@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: McAleavey
+    given-names: Maia
+    orcid: https://orcid.org/0009-0003-5419-1922
+  - family-names: Thomas
+    given-names: David
+    orcid: https://orcid.org/0000-0001-5494-6297
+  - family-names: Stewart
+    given-names: Ashlyn
+    orcid: https://orcid.org/0009-0003-7151-9678
+title: "Chronicles - Data"
+abstract: "Chronicles Project - Data"
+version: 0.0.1
+date-released: "2023-10-5"
+license: "CC-BY-NC-SA-4.0"
+repository-code: "https://github.com/BCDigSchol/chronicles-data"
