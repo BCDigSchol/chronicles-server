@@ -13,6 +13,7 @@ module.exports = {
             label: item.label,
             gender: item.gender,
             nationality: item.nationality,
+            specificNationality: item.specificNationality,
             nonPerson: item.nonPerson,
             notes: item.notes,
             createdAt: new Date(),

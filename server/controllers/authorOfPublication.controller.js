@@ -109,7 +109,7 @@ exports.findOne = (req, res) => {
     include: [{
         model: Author,
         as: 'author',
-        attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality'],
+        attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
       },
       {
         model: Publication,

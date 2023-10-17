@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     label: DataTypes.STRING,
     gender: DataTypes.STRING,
     nationality: DataTypes.STRING,
+    specificNationality: DataTypes.STRING,
     nonPerson: DataTypes.BOOLEAN,
     notes: DataTypes.TEXT
   }, {

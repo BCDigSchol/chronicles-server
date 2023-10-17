@@ -34,6 +34,7 @@ exports.create = (req, res) => {
     label: req.body.label || '',
     gender: req.body.gender,
     nationality: req.body.nationality,
+    specificNationality: req.body.specificNationality || '',
     nonPerson: req.body.nonPerson || false,
     notes: req.body.notes || '',
   };
