@@ -150,14 +150,15 @@ exports.findOne = (req, res) => {
         model: Narration,
         as: 'narrations',
         attributes: ['narration']
-      }, {
+      }, 
+      {
         model: Author,
         as: 'authors',
         attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
         through: {
           attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
         }
-      }
+      },
     ],
   })
     .then(data => {

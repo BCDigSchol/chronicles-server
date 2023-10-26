@@ -13,9 +13,6 @@ exports.create = (req, res) => {
   if (!req.body.publicationId) {
     errorMsgs.push('Must contain a \'publicationId\' field!');
   }
-  if (!req.body.narration) {
-    errorMsgs.push('Must contain an \'narration\' field!');
-  }
   if (errorMsgs.length > 0) {
     res.send({
       status: 0,
@@ -25,7 +22,6 @@ exports.create = (req, res) => {
   }
   const requestObj = {
     id: req.body.id || null,
-    publicationId: req.body.publicationId,
     narration: req.body.narration
   };
   // Save Inscription in the database
