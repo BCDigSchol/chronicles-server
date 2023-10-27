@@ -22,7 +22,8 @@ exports.create = (req, res) => {
   }
   const requestObj = {
     id: req.body.id || null,
-    narration: req.body.narration
+    narration: req.body.narration,
+    notes: req.body.notes
   };
   // Save Inscription in the database
   Narration.create(requestObj)
@@ -97,7 +98,7 @@ exports.findOne = (req, res) => {
     include: [
       {
         model: Publication,
-        as: 'publication',
+        as: 'publications',
         attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
         include: [
             {

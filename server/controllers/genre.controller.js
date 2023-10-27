@@ -22,7 +22,8 @@ exports.create = (req, res) => {
   }
   const requestObj = {
     id: req.body.id || null,
-    genre: req.body.genre
+    genre: req.body.genre,
+    notes: req.body.notes
   };
   // Save Inscription in the database
   Genre.create(requestObj)
@@ -97,8 +98,8 @@ exports.findOne = (req, res) => {
     include: [
       {
         model: Publication,
-        as: 'publication',
-        attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
+        as: 'publications',
+        /*
         include: [
             {
                 model: Author,
@@ -113,6 +114,7 @@ exports.findOne = (req, res) => {
                 attributes: ['narration']
             }
         ]
+        */
       }
     ],
   })
