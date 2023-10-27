@@ -10,8 +10,8 @@ const Genre = db.genres;
 exports.create = (req, res) => {
   var errorMsgs = [];
   // Validate request
-  if (!req.body.publicationId) {
-    errorMsgs.push('Must contain a \'publicationId\' field!');
+  if (!req.body.narration) {
+    errorMsgs.push('Must contain a \'narration\' field!');
   }
   if (errorMsgs.length > 0) {
     res.send({
