@@ -13,4 +13,5 @@ module.exports = app => {
   require('./genreOfPublication.routes')(app);
   require('./narration.routes')(app);
   require('./narrationOfPublication.routes')(app);
+  require('./export.routes')(app);
 };
