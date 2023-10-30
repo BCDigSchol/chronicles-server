@@ -82,19 +82,19 @@ exports.findAll = (req, res) => {
     where.subtitle = { [Op.like]: `%${subtitle}%` };
   }
   if (setting) {
-    where.setting = { [Op.like]: `%${setting}%` };
+    where.settingCategory = { [Op.like]: `%${setting}%` };
   }
   if (period) {
     where.period = { [Op.like]: `%${period}%` };
   }
   if (scale) {
-    where.scale = { [Op.like]: `%${scale}%` };
+    where.timeScale = { [Op.like]: `%${scale}%` };
   }
   if (protagonist) {
-    where.protagonist = { [Op.like]: `%${protagonist}%` };
+    where.protagonistCategory = { [Op.like]: `%${protagonist}%` };
   }
-  if (subtitle) {
-    where.group = { [Op.like]: `%${group}%` };
+  if (group) {
+    where.protagonistGroupType = { [Op.like]: `%${group}%` };
   }
   if (genre) {
     genreWhere.genre = { [Op.like]: `%${genre}%` };
