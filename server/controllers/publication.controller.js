@@ -70,10 +70,11 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { title, subtitle, setting, period, scale, protagonist, group, page, size, genre, narration } = req.query;
+  let { title, subtitle, setting, period, scale, protagonist, group, page, size, genre, narration, author } = req.query;
   let where = {};
   let genreWhere = {};
   let narrationWhere = {};
+  let authorWhere = {};
   let { limit, offset } = getPagination(page, size);
   if (title) {
     where.title = { [Op.like]: `%${title}%` };
@@ -101,6 +102,9 @@ exports.findAll = (req, res) => {
   }
   if (narration) {
     narrationWhere.narration = { [Op.like]: `%${narration}%` };
+  }
+  if (author) {
+    authorWhere.surname = { [Op.substring]: `%${author}`};
   }
   
   // if no page or size info is passed, return all items with minimal extra info
@@ -137,6 +141,11 @@ exports.findAll = (req, res) => {
         attributes: ['narration', 'notes'],
         where: narrationWhere,
         required: narrationWhere.narration != undefined
+      }, {
+        model: Author,
+        as: 'authors',
+        where: authorWhere,
+        required: authorWhere.surname != undefined
       }]
     })
     .then(data => {
