@@ -132,13 +132,11 @@ exports.findAll = (req, res) => {
       include: [{
         model: Genre,
         as: 'genres',
-        attributes: ['genre', 'notes'],
         where: genreWhere,
         required: genreWhere.genre != undefined  
       }, {
         model: Narration,
         as: 'narrations',
-        attributes: ['narration', 'notes'],
         where: narrationWhere,
         required: narrationWhere.narration != undefined
       }, {
@@ -169,16 +167,13 @@ exports.findOne = (req, res) => {
       {
         model: Genre,
         as: 'genres',
-        attributes: ['genre']
       }, {
         model: Narration,
         as: 'narrations',
-        attributes: ['narration']
       }, 
       {
         model: Author,
         as: 'authors',
-        attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
         through: {
           attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
         }
