@@ -129,17 +129,14 @@ exports.findOne = (req, res) => {
         as: 'publications',
         attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
         through: {
-          attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
         },
         include: [
             {
                 model: Genre,
-                as: 'genres',
-                attributes: ['genre']
+                as: 'genres'
             }, {
                 model: Narration,
-                as: 'narrations',
-                attributes: ['narration']
+                as: 'narrations'
             }
         ]
       }
