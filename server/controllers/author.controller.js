@@ -127,7 +127,6 @@ exports.findOne = (req, res) => {
       {
         model: Publication,
         as: 'publications',
-        attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
         through: {
         },
         include: [
