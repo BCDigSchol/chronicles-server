@@ -61,7 +61,7 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { surname, maidenName, otherNames, label, gender, nationality, page, size } = req.query;
+  let { surname, maidenName, otherNames, label, gender, nationality, specificNationality, page, size } = req.query;
   let where = {};
   let { limit, offset } = getPagination(page, size);
   if (surname) {
@@ -81,6 +81,9 @@ exports.findAll = (req, res) => {
   }
   if (nationality) {
     where.nationality = { [Op.like]: `%${nationality}%` };
+  }
+  if (specificNationality) {
+    where.specificNationality = { [Op.like]: `%${specificNationality}%` };
   }
   
   // if no page or size info is passed, return all items with minimal extra info
