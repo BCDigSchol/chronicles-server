@@ -70,7 +70,7 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { title, subtitle, setting, period, scale, protagonist, group, page, size, genre, narration, author } = req.query;
+  let { title, subtitle, setting, settingCategory, period, scale, protagonist, group, page, size, genre, narration, author } = req.query;
   let where = {};
   let genreWhere = {};
   let narrationWhere = {};
@@ -83,7 +83,10 @@ exports.findAll = (req, res) => {
     where.subtitle = { [Op.like]: `%${subtitle}%` };
   }
   if (setting) {
-    where.settingCategory = { [Op.like]: `%${setting}%` };
+    where.setting = { [Op.like]: `%${setting}%` };
+  }
+  if (settingCategory) {
+    where.settingCategory = { [Op.like]: `%${settingCategory}%` };
   }
   if (period) {
     where.period = { [Op.like]: `%${period}%` };
