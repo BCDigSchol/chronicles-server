@@ -39,7 +39,7 @@ exports.create = (req, res) => {
     id: req.body.id || null,
     title: req.body.title,
     subtitle: req.body.subtitle,
-    settingTitle: req.body.settingTitle,
+    settingName: req.body.settingName,
     settingCategory: req.body.settingCategory,
     period: req.body.period,
     timeScale: req.body.timeScale,
@@ -83,7 +83,7 @@ exports.findAll = (req, res) => {
     where.subtitle = { [Op.like]: `%${subtitle}%` };
   }
   if (setting) {
-    where.setting = { [Op.like]: `%${setting}%` };
+    where.settingName = { [Op.like]: `%${setting}%` };
   }
   if (settingCategory) {
     where.settingCategory = { [Op.like]: `%${settingCategory}%` };
