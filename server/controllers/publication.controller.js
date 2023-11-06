@@ -178,7 +178,7 @@ exports.findOne = (req, res) => {
         model: Author,
         as: 'authors',
         through: {
-          attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
+          attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName', 'notes']
         }
       },
     ],

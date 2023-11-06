@@ -131,6 +131,7 @@ exports.findOne = (req, res) => {
         model: Publication,
         as: 'publications',
         through: {
+          attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName', 'notes']
         },
         include: [
             {
