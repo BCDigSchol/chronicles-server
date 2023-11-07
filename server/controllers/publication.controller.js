@@ -70,7 +70,7 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { title, subtitle, setting, settingCategory, period, scale, protagonist, group, page, size, genre, narration, author } = req.query;
+  let { title, subtitle, settingName, settingCategory, period, timeScale, protagonistCategory, protagonistGroupType, page, size, genre, narration, author } = req.query;
   let where = {};
   let genreWhere = {};
   let narrationWhere = {};
@@ -82,8 +82,8 @@ exports.findAll = (req, res) => {
   if (subtitle) {
     where.subtitle = { [Op.like]: `%${subtitle}%` };
   }
-  if (setting) {
-    where.settingName = { [Op.like]: `%${setting}%` };
+  if (settingName) {
+    where.settingName = { [Op.like]: `%${settingName}%` };
   }
   if (settingCategory) {
     where.settingCategory = { [Op.like]: `%${settingCategory}%` };
@@ -91,14 +91,14 @@ exports.findAll = (req, res) => {
   if (period) {
     where.period = { [Op.like]: `%${period}%` };
   }
-  if (scale) {
-    where.timeScale = { [Op.like]: `%${scale}%` };
+  if (timeScale) {
+    where.timeScale = { [Op.like]: `%${timeScale}%` };
   }
-  if (protagonist) {
-    where.protagonistCategory = { [Op.like]: `%${protagonist}%` };
+  if (protagonistCategory) {
+    where.protagonistCategory = { [Op.like]: `%${protagonistCategory}%` };
   }
-  if (group) {
-    where.protagonistGroupType = { [Op.like]: `%${group}%` };
+  if (protagonistGroupType) {
+    where.protagonistGroupType = { [Op.like]: `%${protagonistGroupType}%` };
   }
   if (genre) {
     genreWhere.genre = { [Op.like]: `%${genre}%` };
