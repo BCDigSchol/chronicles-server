@@ -34,6 +34,36 @@ module.exports.verifyToken = (req, res, next) => {
 };
 
 /**
+ * Ensures that request was sent by an authorized editor, admin, or owner
+ * 
+ * @param {*} req Request object
+ * @param {*} res Response data from database
+ * @param {*} next Next function to execute, upon completion
+ */
+module.exports.verifyEditorToken = (req, res, next) => {
+  const editorRoles = ['Owner', 'Editor', 'Admin'];
+  if (!req.headers.authorization) {
+    res.status(401).send({ message: 'Unauthorized' });
+  }
+  else {
+    jwt.verify(req.headers.authorization, config.JWT_SECRET, function (err, decoded) {
+      if(decoded) {
+        req.user = decoded.data;
+        if(!editorRoles.includes(req.user.role)) {
+          res.status(401).send({ message: 'User is not an approved editor or administrator'});
+        }
+        else {
+          next();
+        }
+      }
+      else {
+        res.status(401).send({ message: 'Unauthorized' });
+      }
+    });
+  }
+};
+
+/**
  * Ensures that request was sent by an authorized editor or owner.
  * 
  * @param {*} req Request object
@@ -41,7 +71,7 @@ module.exports.verifyToken = (req, res, next) => {
  * @param {*} next Next function to execute, upon completion
  */
 module.exports.verifyAdminToken = (req, res, next) => {
-  const adminRoles = ['Owner', 'Editor'];
+  const adminRoles = ['Owner', 'Admin'];
   if (!req.headers.authorization) {
     res.status(401).send({ message: 'Unauthorized' });
   }
@@ -51,6 +81,36 @@ module.exports.verifyAdminToken = (req, res, next) => {
         req.user = decoded.data;
         if(!adminRoles.includes(req.user.role)) {
           res.status(401).send({ message: 'User is not an approved administrator'});
+        }
+        else {
+          next();
+        }
+      }
+      else {
+        res.status(401).send({ message: 'Unauthorized' });
+      }
+    });
+  }
+};
+
+/**
+ * Ensures that request was sent by the owner.
+ * 
+ * @param {*} req Request object
+ * @param {*} res Response data from database
+ * @param {*} next Next function to execute, upon completion
+ */
+module.exports.verifyOwnerToken = (req, res, next) => {
+  const adminRoles = ['Owner'];
+  if (!req.headers.authorization) {
+    res.status(401).send({ message: 'Unauthorized' });
+  }
+  else {
+    jwt.verify(req.headers.authorization, config.JWT_SECRET, function (err, decoded) {
+      if(decoded) {
+        req.user = decoded.data;
+        if(!adminRoles.includes(req.user.role)) {
+          res.status(401).send({ message: 'User is not the owner'});
         }
         else {
           next();
