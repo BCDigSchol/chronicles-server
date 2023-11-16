@@ -188,6 +188,7 @@ exports.update = (req, res) => {
   // owners can edit everyone, admins can promote users to editors or admins
   // editors and regular users can't change roles
   if (req.body.role) {
+    requestObj.role = req.body.role;
     // ensures that the role is only Owner, Admin, Editor, or User
     if (req.body.role != 'Owner' && req.body.role != 'Admin' && req.body.role != 'Editor' && req.body.role != 'User') {
       invalidAuth = true;
