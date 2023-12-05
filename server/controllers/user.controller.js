@@ -145,6 +145,7 @@ exports.register = (req, res) => {
         role: userRole,
         // hash the password
         password: md5(req.body.password.toString()),
+        theme: 'light'
       };
       User.create(requestObj)
         .then(data => {

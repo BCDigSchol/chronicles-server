@@ -26,6 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     // role (e.g. User, Editor, Owner)
     role: DataTypes.STRING,
+    // setting for ui theme (light or dark)
+    theme: DataTypes.STRING,
     // password encrypted with md5
     password: DataTypes.STRING
   }, {

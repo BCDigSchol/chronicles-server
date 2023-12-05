@@ -16,6 +16,7 @@ module.exports = {
           password: md5(config.OWNER_PASSWORD),
           email: config.OWNER_EMAIL,
           role: 'Owner',
+          theme: 'light',
           createdAt: new Date(),
           updatedAt: new Date()
         },
