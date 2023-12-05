@@ -185,6 +185,11 @@ exports.update = (req, res) => {
   if (req.body.email) {
     requestObj.email = req.body.email;
   }
+  if (req.body.theme) {
+    if (req.body.theme == 'light' || req.body.theme == 'dark') {
+      requestObj.theme = req.body.theme;
+    }
+  }
   // ensure users can only can't change role status unless they have proper approval levels
   // owners can edit everyone, admins can promote users to editors or admins
   // editors and regular users can't change roles
