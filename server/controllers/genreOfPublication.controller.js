@@ -1,17 +1,21 @@
 const db = require('../models');
 const Op = db.Sequelize.Op;
 
+const GenreOfPublication = db.genresOfPublications;
 const Author = db.authors;
 const Publication = db.publications;
-const Narration = db.narrations;
 const Genre = db.genres;
+const Narration = db.narrations;
 
 // Create and Save a new Inscription
 exports.create = (req, res) => {
   var errorMsgs = [];
   // Validate request
-  if (!req.body.narration) {
-    errorMsgs.push('Must contain a \'narration\' field!');
+  if (!req.body.genreId) {
+    errorMsgs.push('Must contain a \'genreId\' field!');
+  }
+  if (!req.body.publicationId) {
+    errorMsgs.push('Must contain an \'publicationId\' field!');
   }
   if (errorMsgs.length > 0) {
     res.send({
@@ -21,19 +25,19 @@ exports.create = (req, res) => {
     return;
   }
   const requestObj = {
-    id: req.body.id || null,
-    narration: req.body.narration,
-    notes: req.body.notes
+    genreId: req.body.genreId,
+    publicationId: req.body.publicationId,
+    notes: req.body.notes || '',
   };
   // Save Inscription in the database
-  Narration.create(requestObj)
+  GenreOfPublication.create(requestObj)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || 'Some error occurred while creating the Narration.'
+          err.message || 'Some error occurred while creating the GenreOfPublication.'
       });
     });
 };
@@ -48,32 +52,25 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { narration, page, size } = req.query;
-  let where = {};
+  let { page, size } = req.query;
   let { limit, offset } = getPagination(page, size);
-  if (narration) {
-    where.narration = { [Op.like]: `%${narration}%` };
-  }
   
   // if no page or size info is passed, return all items with minimal extra info
   if (page === undefined || size === undefined) {
-    Narration.findAll({
-      where
-    })
+    GenreOfPublication.findAll()
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || 'Some error occurred while retrieving narrations.'
+            err.message || 'Some error occurred while retrieving genres of publications.'
         });
       });
   }
   // otherwise return all data for specified items
   else {
-    Narration.findAndCountAll({
-      where,
+    GenreOfPublication.findAndCountAll({
       limit,
       offset,
       distinct: true,
@@ -84,7 +81,7 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || 'Some error occurred while retrieving narrations.'
+          err.message || 'Some error occurred while retrieving genres of publications.'
       });
     });
   }
@@ -93,26 +90,31 @@ exports.findAll = (req, res) => {
 
 // Find a single item with an id
 exports.findOne = (req, res) => {
-  const id = req.params.id;
-  Narration.findByPk(id, {
+  const publicationId = req.params.publicationId;
+  const genreId = req.params.genreId;
+  GenreOfPublication.findOne({
+    where: {
+        publicationId: publicationId,
+        genreId: genreId
+    },
     include: [
       {
+        model: Genre,
+        as: 'genre'
+      },
+      {
         model: Publication,
-        as: 'publications',
+        as: 'publication',
         attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
         include: [
-            {
-                model: Author,
-                as: 'authors',
-                attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
-                through: {
-                    attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
-                }
-            }, {
-                model: Genre,
-                as: 'genres',
-                attributes: ['genre']
-            }
+          {
+            model: Author,
+            as: 'authors',
+          },
+          {
+            model: Narration,
+            as: 'narrations',
+          }
         ]
       }
     ],
@@ -122,37 +124,38 @@ exports.findOne = (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Narration with id=${id}.`
+          message: `Cannot find GenreOfPublication with publicationId=${publicationId} and genreId=${genreId}.`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: 'Error retrieving Narration with id=' + id
+        message: 'Error retrieving GenreOfPublication with publicationId=' + publicationId + ' and genreId=' + genreId
       });
     });
 };
 
 // Delete an item with the specified id in the request
 exports.delete = (req, res) => {
-  const id = req.params.id;
-  Narration.destroy({
-    where: { id: id }
+  const publicationId = req.params.publicationId;
+  const genreId = req.params.genreId;
+  GenreOfPublication.destroy({
+    where: { publicationId: publicationId, genreId: genreId }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: 'Narration was deleted successfully!'
+          message: 'GenreOfPublication was deleted successfully!'
         });
       } else {
         res.send({
-          message: `Cannot delete Narration with id=${id}. Maybe Narration was not found!`
+          message: `Cannot delete GenreOfPublication with publicationId=${publicationId} and genreId=${genreId}. Maybe GenreOfPublication was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: 'Could not delete Narration with id=' + id
+        message: 'Could not delete GenreOfPublication with publication=' + publicationId + ' and genreId=' + genreId
       });
     });
 };
@@ -161,8 +164,11 @@ exports.delete = (req, res) => {
 exports.update = (req, res) => {
   var errorMsgs = [];
   // validate request
-  if (!req.body.id) {
-    errorMsgs.push('Must contain an \'id\' field!');
+  if (!req.body.publicationId) {
+    errorMsgs.push('Must contain an \'publicationId\' field!');
+  }
+  if (!req.body.genreId) {
+    errorMsgs.push('Must contain an \'genreId\' field!');
   }
   if (errorMsgs.length > 0) {
     res.send({
@@ -171,41 +177,42 @@ exports.update = (req, res) => {
     });
     return;
   }
-  const id = req.params.id;
-  Narration.update(req.body, {
-    where: { id: id }
+  const publicationId = req.params.publicationId;
+  const genreId = req.params.genreId;
+  GenreOfPublication.update(req.body, {
+    where: { publicationId: publicationId, genreId: genreId }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: 'Narration was updated successfully.'
+          message: 'GenreOfPublication was updated successfully.'
         });
       } else {
         res.send({
-          message: `Cannot update Narration with id=${id}. Maybe Narration was not found or req.body is empty!`
+          message: `Cannot update GenreOfPublication with publicationId=${publicationId} and genreId=${genreId}. Maybe GenreOfPublication was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: 'Error updating Narration with id=' + id
+        message: 'Error updating GenreOfPublication with publicationId=' + publicationId + ' and genreId=' + genreId
       });
     });
 };
 
 // Delete all item from the database.
 exports.deleteAll = (req, res) => {
-  Narration.destroy({
+  GenreOfPublication.destroy({
     where: {},
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} Narrations were deleted successfully!` });
+      res.send({ message: `${nums} GenreOfPublication were deleted successfully!` });
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || 'Some error occurred while removing all narrations.'
+          err.message || 'Some error occurred while removing all genres of publications.'
       });
     });
 };

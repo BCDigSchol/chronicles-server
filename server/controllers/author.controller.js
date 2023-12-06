@@ -34,6 +34,7 @@ exports.create = (req, res) => {
     label: req.body.label || '',
     gender: req.body.gender,
     nationality: req.body.nationality,
+    specificNationality: req.body.specificNationality || '',
     nonPerson: req.body.nonPerson || false,
     notes: req.body.notes || '',
   };
@@ -60,7 +61,7 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { surname, maidenName, otherNames, label, gender, nationality, page, size } = req.query;
+  let { surname, maidenName, otherNames, label, gender, nationality, specificNationality, page, size } = req.query;
   let where = {};
   let { limit, offset } = getPagination(page, size);
   if (surname) {
@@ -80,6 +81,9 @@ exports.findAll = (req, res) => {
   }
   if (nationality) {
     where.nationality = { [Op.like]: `%${nationality}%` };
+  }
+  if (specificNationality) {
+    where.specificNationality = { [Op.like]: `%${specificNationality}%` };
   }
   
   // if no page or size info is passed, return all items with minimal extra info
@@ -126,19 +130,16 @@ exports.findOne = (req, res) => {
       {
         model: Publication,
         as: 'publications',
-        attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
         through: {
-          attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
+          attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName', 'notes']
         },
         include: [
             {
                 model: Genre,
-                as: 'genres',
-                attributes: ['genre']
+                as: 'genres'
             }, {
                 model: Narration,
-                as: 'narrations',
-                attributes: ['narration']
+                as: 'narrations'
             }
         ]
       }

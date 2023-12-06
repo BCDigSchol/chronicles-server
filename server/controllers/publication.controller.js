@@ -39,7 +39,7 @@ exports.create = (req, res) => {
     id: req.body.id || null,
     title: req.body.title,
     subtitle: req.body.subtitle,
-    settingTitle: req.body.settingTitle,
+    settingName: req.body.settingName,
     settingCategory: req.body.settingCategory,
     period: req.body.period,
     timeScale: req.body.timeScale,
@@ -70,10 +70,11 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { title, subtitle, page, size, genre, narration } = req.query;
+  let { title, subtitle, settingName, settingCategory, period, timeScale, protagonistCategory, protagonistGroupType, page, size, genre, narration, author } = req.query;
   let where = {};
   let genreWhere = {};
   let narrationWhere = {};
+  let authorWhere = {};
   let { limit, offset } = getPagination(page, size);
   if (title) {
     where.title = { [Op.like]: `%${title}%` };
@@ -81,11 +82,32 @@ exports.findAll = (req, res) => {
   if (subtitle) {
     where.subtitle = { [Op.like]: `%${subtitle}%` };
   }
+  if (settingName) {
+    where.settingName = { [Op.like]: `%${settingName}%` };
+  }
+  if (settingCategory) {
+    where.settingCategory = { [Op.like]: `%${settingCategory}%` };
+  }
+  if (period) {
+    where.period = { [Op.like]: `%${period}%` };
+  }
+  if (timeScale) {
+    where.timeScale = { [Op.like]: `%${timeScale}%` };
+  }
+  if (protagonistCategory) {
+    where.protagonistCategory = { [Op.like]: `%${protagonistCategory}%` };
+  }
+  if (protagonistGroupType) {
+    where.protagonistGroupType = { [Op.like]: `%${protagonistGroupType}%` };
+  }
   if (genre) {
     genreWhere.genre = { [Op.like]: `%${genre}%` };
   }
   if (narration) {
     narrationWhere.narration = { [Op.like]: `%${narration}%` };
+  }
+  if (author) {
+    authorWhere.surname = { [Op.substring]: `%${author}`};
   }
   
   // if no page or size info is passed, return all items with minimal extra info
@@ -113,15 +135,18 @@ exports.findAll = (req, res) => {
       include: [{
         model: Genre,
         as: 'genres',
-        attributes: ['genre', 'notes'],
         where: genreWhere,
         required: genreWhere.genre != undefined  
       }, {
         model: Narration,
         as: 'narrations',
-        attributes: ['narration', 'notes'],
         where: narrationWhere,
         required: narrationWhere.narration != undefined
+      }, {
+        model: Author,
+        as: 'authors',
+        where: authorWhere,
+        required: authorWhere.surname != undefined
       }]
     })
     .then(data => {
@@ -145,19 +170,17 @@ exports.findOne = (req, res) => {
       {
         model: Genre,
         as: 'genres',
-        attributes: ['genre']
       }, {
         model: Narration,
         as: 'narrations',
-        attributes: ['narration']
-      }, {
+      }, 
+      {
         model: Author,
         as: 'authors',
-        attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality'],
         through: {
-          attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
+          attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName', 'notes']
         }
-      }
+      },
     ],
   })
     .then(data => {

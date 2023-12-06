@@ -27,6 +27,9 @@ module.exports = {
       nationality: {
         type: Sequelize.STRING
       },
+      specificNationality: {
+        type: Sequelize.STRING
+      },
       nonPerson: {
         type: Sequelize.BOOLEAN
       },

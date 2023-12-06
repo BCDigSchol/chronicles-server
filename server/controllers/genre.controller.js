@@ -10,9 +10,6 @@ const Narration = db.narrations;
 exports.create = (req, res) => {
   var errorMsgs = [];
   // Validate request
-  if (!req.body.publicationId) {
-    errorMsgs.push('Must contain a \'publicationId\' field!');
-  }
   if (!req.body.genre) {
     errorMsgs.push('Must contain an \'genre\' field!');
   }
@@ -25,8 +22,8 @@ exports.create = (req, res) => {
   }
   const requestObj = {
     id: req.body.id || null,
-    publicationId: req.body.publicationId,
-    genre: req.body.genre
+    genre: req.body.genre,
+    notes: req.body.notes
   };
   // Save Inscription in the database
   Genre.create(requestObj)
@@ -101,13 +98,13 @@ exports.findOne = (req, res) => {
     include: [
       {
         model: Publication,
-        as: 'publication',
-        attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
+        as: 'publications',
+        /*
         include: [
             {
                 model: Author,
                 as: 'authors',
-                attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality'],
+                attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
                 through: {
                     attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
                 }
@@ -117,6 +114,7 @@ exports.findOne = (req, res) => {
                 attributes: ['narration']
             }
         ]
+        */
       }
     ],
   })

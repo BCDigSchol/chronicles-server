@@ -11,11 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Narration.belongsTo(models.publications, { foreignKey: 'publicationId', as: 'publication' })
+      Narration.belongsToMany(models.publications, {
+        through: 'NarrationOfPublications',
+        foreignKey: 'narrationId',
+        as: 'publications'
+      });
     }
   }
   Narration.init({
-    publicationId: DataTypes.INTEGER,
     narration: DataTypes.STRING,
     notes: DataTypes.TEXT
   }, {

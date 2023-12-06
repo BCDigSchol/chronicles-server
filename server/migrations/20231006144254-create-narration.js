@@ -9,9 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      publicationId: {
-        type: Sequelize.INTEGER
-      },
       narration: {
         type: Sequelize.STRING
       },

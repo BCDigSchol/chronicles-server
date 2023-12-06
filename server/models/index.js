@@ -35,7 +35,9 @@ db.publications = require('./publication.model.js')(sequelize, Sequelize);
 db.authors = require('./author.model.js')(sequelize, Sequelize);
 db.authorsOfPublications = require('./authorOfPublication.model.js')(sequelize, Sequelize);
 db.genres = require('./genre.model.js')(sequelize, Sequelize);
+db.genresOfPublications = require('./genreOfPublication.model.js')(sequelize, Sequelize);
 db.narrations = require('./narration.model.js')(sequelize, Sequelize);
+db.narrationsOfPublications = require('./narrationOfPublication.model.js')(sequelize, Sequelize);
 
 // call association functions on all models and set fk constraints
 Object.keys(db).forEach(modelName => {

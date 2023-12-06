@@ -11,11 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Genre.belongsTo(models.publications, { foreignKey: 'publicationId', as: 'publication' })
+      Genre.belongsToMany(models.publications, {
+        through: 'GenreOfPublications',
+        foreignKey: 'genreId',
+        as: 'publications'
+      });
     }
   }
   Genre.init({
-    publicationId: DataTypes.INTEGER,
     genre: DataTypes.STRING,
     notes: DataTypes.TEXT
   }, {
