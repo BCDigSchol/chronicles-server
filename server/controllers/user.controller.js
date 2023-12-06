@@ -38,7 +38,7 @@ exports.findAll = (req, res) => {
       .catch(err => {
         res.send({
           message:
-            err.message || 'Some error occurred while retrieving conferences.'
+            err.message || 'Some error occurred while retrieving users.'
         });
       });
   }
@@ -145,6 +145,7 @@ exports.register = (req, res) => {
         role: userRole,
         // hash the password
         password: md5(req.body.password.toString()),
+        theme: 'light'
       };
       User.create(requestObj)
         .then(data => {
@@ -172,6 +173,7 @@ exports.register = (req, res) => {
 
 // Update a user by the username in the request
 exports.update = (req, res) => {
+  let invalidAuth = false;
   if (!req.body.username) {
     res.send({
       message: 'Must contain an \'username\'!'
@@ -183,10 +185,31 @@ exports.update = (req, res) => {
   if (req.body.email) {
     requestObj.email = req.body.email;
   }
+  if (req.body.theme) {
+    if (req.body.theme == 'light' || req.body.theme == 'dark') {
+      requestObj.theme = req.body.theme;
+    }
+  }
+  // ensure users can only can't change role status unless they have proper approval levels
+  // owners can edit everyone, admins can promote users to editors or admins
+  // editors and regular users can't change roles
   if (req.body.role) {
     requestObj.role = req.body.role;
+    // ensures that the role is only Owner, Admin, Editor, or User
+    if (req.body.role != 'Owner' && req.body.role != 'Admin' && req.body.role != 'Editor' && req.body.role != 'User') {
+      invalidAuth = true;
+    }
+    // ensure admins can't set anyone to owner
+    if (req.user.role == 'Admin' && req.body.role == 'Owner') {
+      invalidAuth = true;
+    }
+    // disallow role changes from anyone who isn't owner or admin
+    if ((req.user.role !== 'Owner' && req.user.role !== 'Admin') && (req.body.role == 'Owner' || req.body.role == 'Admin')) {
+      invalidAuth = true;
+    }
   }
-  User.update(requestObj, {where: { username: requestObj.username }})
+  if (!invalidAuth) {
+    User.update(requestObj, {where: { username: requestObj.username }})
     .then(num => {
       if (num == 1) {
         res.send({
@@ -203,5 +226,11 @@ exports.update = (req, res) => {
         message: err.msg || 'Error updating User with id=' + requestObj.username
       });
     });
+  }
+  else {
+    res.send({
+      message: 'User is unauthorized to change to the desired role level'
+    });
+  }
 
 };

@@ -18,6 +18,9 @@ module.exports = {
       role: {
         type: Sequelize.STRING
       },
+      theme: {
+        type: Sequelize.STRING
+      },
       password: {
         type: Sequelize.STRING
       },

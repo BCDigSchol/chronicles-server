@@ -16,6 +16,6 @@ module.exports = app => {
   // Register
   router.post('/register', limitRate, controller.register);
   // Update
-  router.put('/:username', limitRate, auth.verifyToken, controller.update);
+  router.put('/update/:username', limitRate, auth.verifyToken, controller.update);
   app.use('/api/user', router);
 };
