@@ -82,7 +82,7 @@ If you have problems and the docker container keeps restarting, the certbot migh
 
 To develop locally, if you want to use docker, comment out the lines indicated for local development in `docker-compose.yml`. Then launch with `docker compose up -d`.
 
-For vanilla npm operation, move inside the server directory and start the app. First, however, you must have MySql installed locally, and have set up a database, preferably named `icam`, and created a user with full privileges on it named `icamowner` with the password `password`.
+For vanilla npm operation, move inside the server directory and start the app. First, however, you must have MySql installed locally, and have set up a database, preferably named `chronicles`, and created a user with full privileges on it named `chroniclesowner` with the password `password`.
 
  ``` sh
  cd server
