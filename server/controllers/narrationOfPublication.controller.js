@@ -33,12 +33,6 @@ exports.create = (req, res) => {
   NarrationOfPublication.create(requestObj)
     .then(data => {
       res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the NarrationOfPublication.'
-      });
     });
 };
 
@@ -60,12 +54,6 @@ exports.findAll = (req, res) => {
     NarrationOfPublication.findAll()
       .then(data => {
         res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || 'Some error occurred while retrieving narrations of publications.'
-        });
       });
   }
   // otherwise return all data for specified items
@@ -75,15 +63,9 @@ exports.findAll = (req, res) => {
       offset,
       distinct: true,
     })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving narrations of publications.'
+      .then(data => {
+        res.send(data);
       });
-    });
   }
   
 };
@@ -94,8 +76,8 @@ exports.findOne = (req, res) => {
   const narrationId = req.params.narrationId;
   NarrationOfPublication.findOne({
     where: {
-        publicationId: publicationId,
-        narrationId: narrationId
+      publicationId: publicationId,
+      narrationId: narrationId
     },
     include: [
       {
@@ -120,18 +102,7 @@ exports.findOne = (req, res) => {
     ],
   })
     .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find NarrationOfPublication with publicationId=${publicationId} and narrationId=${narrationId}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error retrieving NarrationOfPublication with publicationId=' + publicationId + ' and narrationId=' + narrationId
-      });
+      res.send(data);
     });
 };
 
@@ -143,19 +114,8 @@ exports.delete = (req, res) => {
     where: { publicationId: publicationId, narrationId: narrationId }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'NarrationOfPublication was deleted successfully!'
-        });
-      } else {
-        res.send({
-          message: `Cannot delete NarrationOfPublication with publicationId=${publicationId} and narrationId=${narrationId}. Maybe NarrationOfPublication was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Could not delete NarrationOfPublication with publication=' + publicationId + ' and narrationId=' + narrationId
+      res.send({
+        message: 'NarrationOfPublication was deleted successfully!'
       });
     });
 };
@@ -183,19 +143,8 @@ exports.update = (req, res) => {
     where: { publicationId: publicationId, narrationId: narrationId }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'NarrationOfPublication was updated successfully.'
-        });
-      } else {
-        res.send({
-          message: `Cannot update NarrationOfPublication with publicationId=${publicationId} and narrationId=${narrationId}. Maybe NarrationOfPublication was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error updating NarrationOfPublication with publicationId=' + publicationId + ' and narrationId=' + narrationId
+      res.send({
+        message: 'NarrationOfPublication was updated successfully.'
       });
     });
 };
@@ -207,12 +156,6 @@ exports.deleteAll = (req, res) => {
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} NarrationOfPublication were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all narrations of publications.'
-      });
+      res.send({ message: `${nums} NarrationsOfPublications were deleted successfully!` });
     });
 };

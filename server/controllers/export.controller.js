@@ -29,34 +29,34 @@ exports.findAll = (req, res) => {
 
   Publication.findAll()
     .then(publicationData => {
-        Author.findAll()
-            .then(authorData => {
-                Genre.findAll()
-                    .then(genreData => {
-                        Narration.findAll()
-                            .then(narrationData => {
-                                AuthorOfPublication.findAll()
-                                    .then(authorOfPublicationData => {
-                                        GenreOfPublication.findAll()
-                                            .then(genreOfPublicationData => {
-                                                NarrationOfPublication.findAll()
-                                                    .then(narrationOfPublicationData => {
-                                                        responseData = {
-                                                            publications: publicationData,
-                                                            authors: authorData,
-                                                            genres: genreData,
-                                                            narrations: narrationData,
-                                                            authorsofPublications: authorOfPublicationData,
-                                                            genresOfPublications: genreOfPublicationData,
-                                                            narrationsOfPublications: narrationOfPublicationData
-                                                        };
-                                                        res.send(responseData);
-                                                    });
-                                            });
-                                    });
+      Author.findAll()
+        .then(authorData => {
+          Genre.findAll()
+            .then(genreData => {
+              Narration.findAll()
+                .then(narrationData => {
+                  AuthorOfPublication.findAll()
+                    .then(authorOfPublicationData => {
+                      GenreOfPublication.findAll()
+                        .then(genreOfPublicationData => {
+                          NarrationOfPublication.findAll()
+                            .then(narrationOfPublicationData => {
+                              responseData = {
+                                publications: publicationData,
+                                authors: authorData,
+                                genres: genreData,
+                                narrations: narrationData,
+                                authorsOfPublications: authorOfPublicationData,
+                                genresOfPublications: genreOfPublicationData,
+                                narrationsOfPublications: narrationOfPublicationData
+                              };
+                              res.send(responseData);
                             });
+                        });
                     });
+                });
             });
+        });
     });
 
 };

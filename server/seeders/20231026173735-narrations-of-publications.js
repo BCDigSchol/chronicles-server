@@ -5,14 +5,14 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     for (const item of importData) {
       await queryInterface.bulkInsert('NarrationOfPublications', [
-          {
-            narrationId: item.narrationId,
-            publicationId: item.publicationId,
-            notes: item.notes || '',
-            createdAt: new Date(),
-            updatedAt: new Date()
-          }
-        ],
+        {
+          narrationId: item.narrationId,
+          publicationId: item.publicationId,
+          notes: item.notes || '',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ],
       {});
     }
   },

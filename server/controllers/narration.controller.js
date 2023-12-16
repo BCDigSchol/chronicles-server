@@ -29,12 +29,6 @@ exports.create = (req, res) => {
   Narration.create(requestObj)
     .then(data => {
       res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Narration.'
-      });
     });
 };
 
@@ -78,15 +72,9 @@ exports.findAll = (req, res) => {
       offset,
       distinct: true,
     })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving narrations.'
+      .then(data => {
+        res.send(data);
       });
-    });
   }
   
 };
@@ -101,35 +89,24 @@ exports.findOne = (req, res) => {
         as: 'publications',
         attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
         include: [
-            {
-                model: Author,
-                as: 'authors',
-                attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
-                through: {
-                    attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
-                }
-            }, {
-                model: Genre,
-                as: 'genres',
-                attributes: ['genre']
+          {
+            model: Author,
+            as: 'authors',
+            attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
+            through: {
+              attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
             }
+          }, {
+            model: Genre,
+            as: 'genres',
+            attributes: ['genre']
+          }
         ]
       }
     ],
   })
     .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find Narration with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error retrieving Narration with id=' + id
-      });
+      res.send(data);
     });
 };
 
@@ -149,11 +126,6 @@ exports.delete = (req, res) => {
           message: `Cannot delete Narration with id=${id}. Maybe Narration was not found!`
         });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Could not delete Narration with id=' + id
-      });
     });
 };
 
@@ -176,19 +148,8 @@ exports.update = (req, res) => {
     where: { id: id }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Narration was updated successfully.'
-        });
-      } else {
-        res.send({
-          message: `Cannot update Narration with id=${id}. Maybe Narration was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error updating Narration with id=' + id
+      res.send({
+        message: 'Narration was updated successfully.'
       });
     });
 };
@@ -201,11 +162,5 @@ exports.deleteAll = (req, res) => {
   })
     .then(nums => {
       res.send({ message: `${nums} Narrations were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all narrations.'
-      });
     });
 };

@@ -13,22 +13,44 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       AuthorOfPublication.belongsTo(models.authors, {
         foreignKey: 'authorId',
-        as: 'author'
+        as: 'author',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Authors',
+          key: 'id'
+        }
       });
       AuthorOfPublication.belongsTo(models.publications, {
         foreignKey: 'publicationId',
-        as: 'publication'
+        as: 'publication',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Publications',
+          key: 'id'
+        }
       });
     }
   }
   AuthorOfPublication.init({
     publicationId: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      allowNull: false,
+      references: {
+        model: 'Publications',
+        key: 'id'
+      }
     },
     authorId: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      allowNull: false,
+      references: {
+        model: 'Authors',
+        key: 'id'
+      }
     },
     publishedHonorific: DataTypes.STRING,
     publishedName: DataTypes.STRING,
@@ -36,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'AuthorOfPublication',
+    primaryKey: ['publicationId', 'authorId']
   });
   return AuthorOfPublication;
 };

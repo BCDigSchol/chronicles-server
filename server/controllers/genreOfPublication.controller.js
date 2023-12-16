@@ -33,12 +33,6 @@ exports.create = (req, res) => {
   GenreOfPublication.create(requestObj)
     .then(data => {
       res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the GenreOfPublication.'
-      });
     });
 };
 
@@ -60,12 +54,6 @@ exports.findAll = (req, res) => {
     GenreOfPublication.findAll()
       .then(data => {
         res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || 'Some error occurred while retrieving genres of publications.'
-        });
       });
   }
   // otherwise return all data for specified items
@@ -75,15 +63,9 @@ exports.findAll = (req, res) => {
       offset,
       distinct: true,
     })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving genres of publications.'
+      .then(data => {
+        res.send(data);
       });
-    });
   }
   
 };
@@ -94,8 +76,8 @@ exports.findOne = (req, res) => {
   const genreId = req.params.genreId;
   GenreOfPublication.findOne({
     where: {
-        publicationId: publicationId,
-        genreId: genreId
+      publicationId: publicationId,
+      genreId: genreId
     },
     include: [
       {
@@ -120,18 +102,7 @@ exports.findOne = (req, res) => {
     ],
   })
     .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find GenreOfPublication with publicationId=${publicationId} and genreId=${genreId}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error retrieving GenreOfPublication with publicationId=' + publicationId + ' and genreId=' + genreId
-      });
+      res.status(200).send(data);
     });
 };
 
@@ -143,19 +114,8 @@ exports.delete = (req, res) => {
     where: { publicationId: publicationId, genreId: genreId }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'GenreOfPublication was deleted successfully!'
-        });
-      } else {
-        res.send({
-          message: `Cannot delete GenreOfPublication with publicationId=${publicationId} and genreId=${genreId}. Maybe GenreOfPublication was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Could not delete GenreOfPublication with publication=' + publicationId + ' and genreId=' + genreId
+      res.send({
+        message: 'GenreOfPublication was deleted successfully!'
       });
     });
 };
@@ -183,19 +143,8 @@ exports.update = (req, res) => {
     where: { publicationId: publicationId, genreId: genreId }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'GenreOfPublication was updated successfully.'
-        });
-      } else {
-        res.send({
-          message: `Cannot update GenreOfPublication with publicationId=${publicationId} and genreId=${genreId}. Maybe GenreOfPublication was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error updating GenreOfPublication with publicationId=' + publicationId + ' and genreId=' + genreId
+      res.send({
+        message: 'GenreOfPublication was updated successfully.'
       });
     });
 };
@@ -207,12 +156,6 @@ exports.deleteAll = (req, res) => {
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} GenreOfPublication were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all genres of publications.'
-      });
+      res.send({ message: `${nums} GenresOfPublications were deleted successfully!` });
     });
 };

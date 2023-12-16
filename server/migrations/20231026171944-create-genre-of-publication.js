@@ -7,11 +7,19 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
+        references: {
+          model: 'Genres',
+          key: 'id'
+        }
       },
       publicationId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
+        references: {
+          model: 'Publications',
+          key: 'id'
+        }
       },
       notes: {
         type: Sequelize.TEXT

@@ -29,12 +29,6 @@ exports.create = (req, res) => {
   Genre.create(requestObj)
     .then(data => {
       res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Genre.'
-      });
     });
 };
 
@@ -62,12 +56,6 @@ exports.findAll = (req, res) => {
     })
       .then(data => {
         res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || 'Some error occurred while retrieving genres.'
-        });
       });
   }
   // otherwise return all data for specified items
@@ -78,15 +66,9 @@ exports.findAll = (req, res) => {
       offset,
       distinct: true,
     })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving genres.'
+      .then(data => {
+        res.send(data);
       });
-    });
   }
   
 };
@@ -99,22 +81,21 @@ exports.findOne = (req, res) => {
       {
         model: Publication,
         as: 'publications',
-        /*
         include: [
-            {
-                model: Author,
-                as: 'authors',
-                attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
-                through: {
-                    attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
-                }
-            }, {
-                model: Narration,
-                as: 'narrations',
-                attributes: ['narration']
+          {
+            model: Author,
+            as: 'authors',
+            attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
+            through: {
+              attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName']
             }
+          }, {
+            model: Narration,
+            as: 'narrations',
+            attributes: ['narration']
+          }
         ]
-        */
+
       }
     ],
   })
@@ -126,11 +107,6 @@ exports.findOne = (req, res) => {
           message: `Cannot find Genre with id=${id}.`
         });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error retrieving Genre with id=' + id
-      });
     });
 };
 
@@ -141,19 +117,8 @@ exports.delete = (req, res) => {
     where: { id: id }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Genre was deleted successfully!'
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Could not delete Genre with id=' + id
+      res.send({
+        message: 'Genre was deleted successfully!'
       });
     });
 };
@@ -177,19 +142,8 @@ exports.update = (req, res) => {
     where: { id: id }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Genre was updated successfully.'
-        });
-      } else {
-        res.send({
-          message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error updating Genre with id=' + id
+      res.send({
+        message: 'Genre was updated successfully.'
       });
     });
 };
@@ -202,11 +156,5 @@ exports.deleteAll = (req, res) => {
   })
     .then(nums => {
       res.send({ message: `${nums} Genres were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all genres.'
-      });
     });
 };

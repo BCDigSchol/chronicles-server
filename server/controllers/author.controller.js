@@ -42,12 +42,6 @@ exports.create = (req, res) => {
   Author.create(requestObj)
     .then(data => {
       res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Author.'
-      });
     });
 };
 
@@ -93,12 +87,6 @@ exports.findAll = (req, res) => {
     })
       .then(data => {
         res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || 'Some error occurred while retrieving authors.'
-        });
       });
   }
   // otherwise return all data for specified items
@@ -109,15 +97,9 @@ exports.findAll = (req, res) => {
       offset,
       distinct: true,
     })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving authors.'
+      .then(data => {
+        res.send(data);
       });
-    });
   }
   
 };
@@ -134,30 +116,19 @@ exports.findOne = (req, res) => {
           attributes: ['publicationId', 'authorId', 'publishedHonorific', 'publishedName', 'notes']
         },
         include: [
-            {
-                model: Genre,
-                as: 'genres'
-            }, {
-                model: Narration,
-                as: 'narrations'
-            }
+          {
+            model: Genre,
+            as: 'genres'
+          }, {
+            model: Narration,
+            as: 'narrations'
+          }
         ]
       }
     ],
   })
     .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find Author with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error retrieving Author with id=' + id
-      });
+      res.send(data);
     });
 };
 
@@ -168,19 +139,8 @@ exports.delete = (req, res) => {
     where: { id: id }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Author was deleted successfully!'
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Author with id=${id}. Maybe Author was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Could not delete Author with id=' + id
+      res.send({
+        message: 'Author was deleted successfully!'
       });
     });
 };
@@ -204,19 +164,8 @@ exports.update = (req, res) => {
     where: { id: id }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Author was updated successfully.'
-        });
-      } else {
-        res.send({
-          message: `Cannot update Author with id=${id}. Maybe Author was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error updating Author with id=' + id
+      res.send({
+        message: 'Author was updated successfully.'
       });
     });
 };
@@ -229,11 +178,5 @@ exports.deleteAll = (req, res) => {
   })
     .then(nums => {
       res.send({ message: `${nums} Authors were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all authors.'
-      });
     });
 };
