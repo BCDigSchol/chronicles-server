@@ -1,6 +1,8 @@
 {
     "env": {
-        "es2022": true
+        "es2022": true,
+        "node": true,
+        "jest": true
     },
     "extends": [
         "eslint:recommended"
@@ -9,6 +11,7 @@
         "ecmaVersion": "latest"
     },
     "rules": {
+        "global-require": "off",
         "indent": [
             "error",
             2

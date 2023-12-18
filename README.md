@@ -92,6 +92,9 @@ npm start
 To run testing...
 
 ``` sh
+# move into the docker shell
+docker exec -it NAME_OF_YOUR_CONTAINER sh
+# run tests
 npm test
 ```
 
