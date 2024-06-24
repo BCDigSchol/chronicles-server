@@ -8,10 +8,10 @@
 
 module.exports = {
   HOST: process.env.DB_HOST || 'localhost',
-  USER: process.env.DB_USER || 'icamuser',
+  USER: process.env.DB_USER || 'root',
   PASSWORD: process.env.DB_PASSWORD || 'password',
-  DB: process.env.DB_NAME || 'icam',
-  port: process.env.DB_PORT || '3000',
+  DB: process.env.DB_NAME || 'chronicles',
+  port: process.env.DB_PORT || '3307',
   dialect: 'mysql',
   pool: {
     max: 500,
@@ -20,7 +20,7 @@ module.exports = {
     idle: 10000
   },
   JWT_SECRET: process.env.JWT_SECRET || 'secret',
-  OWNER_USERNAME: process.env.OWNER_USERNAME || 'icamowner',
+  OWNER_USERNAME: process.env.OWNER_USERNAME || 'chroniclesowner',
   OWNER_PASSWORD: process.env.OWNER_PASSWORD || 'password',
   OWNER_EMAIL: process.env.OWNER_EMAIL || 'sample@email.com'
 };

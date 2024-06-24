@@ -51,12 +51,6 @@ exports.create = (req, res) => {
   Publication.create(requestObj)
     .then(data => {
       res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Publication.'
-      });
     });
 };
 
@@ -117,12 +111,6 @@ exports.findAll = (req, res) => {
     })
       .then(data => {
         res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || 'Some error occurred while retrieving publications.'
-        });
       });
   }
   // otherwise return all data for specified items
@@ -149,15 +137,9 @@ exports.findAll = (req, res) => {
         required: authorWhere.surname != undefined
       }]
     })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving publications.'
+      .then(data => {
+        res.send(data);
       });
-    });
   }
   
 };
@@ -184,18 +166,7 @@ exports.findOne = (req, res) => {
     ],
   })
     .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find Publication with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error retrieving Publication with id=' + id
-      });
+      res.send(data);
     });
 };
 
@@ -206,19 +177,8 @@ exports.delete = (req, res) => {
     where: { id: id }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Publication was deleted successfully!'
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Publication with id=${id}. Maybe Publication was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Could not delete Publication with id=' + id
+      res.send({
+        message: 'Publication was deleted successfully!'
       });
     });
 };
@@ -242,19 +202,8 @@ exports.update = (req, res) => {
     where: { id: id }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Publication was updated successfully.'
-        });
-      } else {
-        res.send({
-          message: `Cannot update Publication with id=${id}. Maybe Publication was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error updating Publication with id=' + id
+      res.send({
+        message: 'Publication was updated successfully.'
       });
     });
 };
@@ -267,11 +216,5 @@ exports.deleteAll = (req, res) => {
   })
     .then(nums => {
       res.send({ message: `${nums} Publications were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all publications.'
-      });
     });
 };

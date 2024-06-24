@@ -5,21 +5,21 @@ module.exports = {
 
     for (const item of importData) {
       await queryInterface.bulkInsert('Publications', [
-          {
-            id: item.id,
-            title: item.title,
-            subtitle: item.subtitle,
-            settingCategory: item.settingCategory,
-            period: item.period,
-            timeScale: item.timeScale,
-            settingName: item.settingName,
-            protagonistCategory: item.protagonistCategory,
-            protagonistGroupType: item.protagonistgroupType,
-            notes: item.notes,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          }
-        ],
+        {
+          id: item.id,
+          title: item.title,
+          subtitle: item.subtitle,
+          settingCategory: item.settingCategory,
+          period: item.period,
+          timeScale: item.timeScale,
+          settingName: item.settingName,
+          protagonistCategory: item.protagonistCategory,
+          protagonistGroupType: item.protagonistgroupType,
+          notes: item.notes,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ],
       {});
     }
   },

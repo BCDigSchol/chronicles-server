@@ -5,21 +5,21 @@ module.exports = {
 
     for (const item of importData) {
       await queryInterface.bulkInsert('Authors', [
-          {
-            id: item.id,
-            surname: item.surname,
-            maidenName: item.maidenName,
-            otherNames: item.otherNames,
-            label: item.label,
-            gender: item.gender,
-            nationality: item.nationality,
-            specificNationality: item.specificNationality,
-            nonPerson: item.nonPerson,
-            notes: item.notes,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          }
-        ],
+        {
+          id: item.id,
+          surname: item.surname,
+          maidenName: item.maidenName,
+          otherNames: item.otherNames,
+          label: item.label,
+          gender: item.gender,
+          nationality: item.nationality,
+          specificNationality: item.specificNationality,
+          nonPerson: item.nonPerson,
+          notes: item.notes,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ],
       {});
     }
   },

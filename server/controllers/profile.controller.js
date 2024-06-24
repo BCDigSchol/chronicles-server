@@ -36,12 +36,5 @@ exports.findOne = (req, res) => {
         let token = jwt.sign({ data: data }, config.JWT_SECRET ? config.JWT_SECRET : 'secret');
         res.send({ status: 1, data: data, token: token });
       }
-    })
-    .catch(err => {
-      res.send({
-        status: 0,
-        message:
-          err.message || 'Some error occurred while viewing profile.'
-      });
     });
 };

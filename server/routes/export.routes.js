@@ -11,5 +11,5 @@ module.exports = app => {
   var router = require('express').Router();
   // Retrieve all
   router.get('/', controller.findAll);
-  app.use('/api/export', auth.verifyAdminToken, router);
+  app.use('/api/export', limitRate, auth.verifyAdminToken, router);
 };

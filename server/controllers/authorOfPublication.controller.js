@@ -35,12 +35,6 @@ exports.create = (req, res) => {
   AuthorOfPublication.create(requestObj)
     .then(data => {
       res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the AuthorOfPublication.'
-      });
     });
 };
 
@@ -54,11 +48,11 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { published_name, page, size } = req.query;
+  let { publishedName, page, size } = req.query;
   let where = {};
   let { limit, offset } = getPagination(page, size);
-  if (published_name) {
-    where.publishedName = { [Op.like]: `%${published_name}%` };
+  if (publishedName) {
+    where.publishedName = { [Op.like]: `%${publishedName}%` };
   }
   
   // if no page or size info is passed, return all items with minimal extra info
@@ -68,12 +62,6 @@ exports.findAll = (req, res) => {
     })
       .then(data => {
         res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || 'Some error occurred while retrieving authors of publications.'
-        });
       });
   }
   // otherwise return all data for specified items
@@ -84,15 +72,9 @@ exports.findAll = (req, res) => {
       offset,
       distinct: true,
     })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving authors of publications.'
+      .then(data => {
+        res.send(data);
       });
-    });
   }
   
 };
@@ -102,31 +84,28 @@ exports.findOne = (req, res) => {
   const publicationId = req.params.publicationId;
   const authorId = req.params.authorId;
   AuthorOfPublication.findOne({
-    where: {
-        publicationId: publicationId,
-        authorId: authorId
-    },
+    where: { publicationId: publicationId, authorId: authorId },
     include: [{
-        model: Author,
-        as: 'author',
-        attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
-      },
-      {
-        model: Publication,
-        as: 'publication',
-        attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
-        include: [
-            {
-                model: Genre,
-                as: 'genres',
-                attributes: ['genre']
-            }, {
-                model: Narration,
-                as: 'narrations',
-                attributes: ['narration']
-            }
-        ]
-      }
+      model: Author,
+      as: 'author',
+      attributes: ['surname', 'maidenName', 'otherNames', 'label', 'gender', 'nationality', 'specificNationality'],
+    },
+    {
+      model: Publication,
+      as: 'publication',
+      attributes: ['title', 'subtitle', 'settingName', 'settingCategory', 'period', 'timeScale', 'protagonistCategory', 'protagonistGroupType'],
+      include: [
+        {
+          model: Genre,
+          as: 'genres',
+          attributes: ['genre']
+        }, {
+          model: Narration,
+          as: 'narrations',
+          attributes: ['narration']
+        }
+      ]
+    }
     ],
   })
     .then(data => {
@@ -137,11 +116,6 @@ exports.findOne = (req, res) => {
           message: `Cannot find AuthorOfPublication with publicationId=${publicationId} and authorId=${authorId}.`
         });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error retrieving AuthorOfPublication with publicationId=' + publicationId + ' and authorId=' + authorId
-      });
     });
 };
 
@@ -153,19 +127,8 @@ exports.delete = (req, res) => {
     where: { publicationId: publicationId, authorId: authorId }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'AuthorOfPublication was deleted successfully!'
-        });
-      } else {
-        res.send({
-          message: `Cannot delete AuthorOfPublication with publicationId=${publicationId} and authorId=${authorId}. Maybe AuthorOfPublication was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Could not delete AuthorOfPublication with publication=' + publicationId + ' and authorId=' + authorId
+      res.send({
+        message: 'AuthorOfPublication was deleted successfully!'
       });
     });
 };
@@ -193,19 +156,8 @@ exports.update = (req, res) => {
     where: { publicationId: publicationId, authorId: authorId }
   })
     .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'AuthorOfPublication was updated successfully.'
-        });
-      } else {
-        res.send({
-          message: `Cannot update Author with publicationId=${publicationId} and authorId=${authorId}. Maybe AuthorOfPublication was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error updating Author with publicationId=' + publicationId + ' and authorId=' + authorId
+      res.send({
+        message: 'AuthorOfPublication was updated successfully.'
       });
     });
 };
@@ -218,11 +170,5 @@ exports.deleteAll = (req, res) => {
   })
     .then(nums => {
       res.send({ message: `${nums} AuthorsOfPublications were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all authors of publications.'
-      });
     });
 };

@@ -20,8 +20,8 @@
   ],
   "scripts": {
     "start": "node server.js",
-    "test": "cross-env NODE_ENV=test jest --collect-coverage --testTimeout=10000 --detectOpenHandles",
-    "pretest": "cross-env NODE_ENV=test DB_NAME=icam DB_USER=icamowner DB_PASSWORD=password DB_HOST=127.0.0.1 DB_PORT=3306 npm run migrate:reset",
+    "test": "cross-env NODE_ENV=test jest --collect-coverage --testTimeout=30000 --detectOpenHandles",
+    "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "migrate": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },

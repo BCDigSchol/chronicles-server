@@ -5,14 +5,14 @@ module.exports = {
 
     for (const item of importData) {
       await queryInterface.bulkInsert('Narrations', [
-          {
-            id: item.id,
-            narration: item.genre,
-            notes: item.notes,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          }
-        ],
+        {
+          id: item.id,
+          narration: item.genre,
+          notes: item.notes,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ],
       {});
     }
   },

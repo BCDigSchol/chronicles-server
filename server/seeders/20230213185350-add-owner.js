@@ -11,16 +11,16 @@ module.exports = {
   async up (queryInterface, Sequelize) {
 
     await queryInterface.bulkInsert('Users', [
-        {
-          username: config.OWNER_USERNAME,
-          password: md5(config.OWNER_PASSWORD),
-          email: config.OWNER_EMAIL,
-          role: 'Owner',
-          theme: 'light',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-      ],
+      {
+        username: config.OWNER_USERNAME,
+        password: md5(config.OWNER_PASSWORD),
+        email: config.OWNER_EMAIL,
+        role: 'Owner',
+        theme: 'light',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+    ],
     {});
 
   },

@@ -6,12 +6,24 @@ module.exports = {
       publicationId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        onDelete: 'NO ACTION'
+        allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Publications',
+          key: 'id'
+        }
       },
       authorId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        onDelete: 'NO ACTION'
+        allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Authors',
+          key: 'id'
+        }
       },
       publishedHonorific: {
         type: Sequelize.STRING

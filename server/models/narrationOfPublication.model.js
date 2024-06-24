@@ -13,27 +13,48 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       NarrationOfPublication.belongsTo(models.narrations, {
         foreignKey: 'narrationId',
-        as: 'narration'
+        as: 'narration',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Narrations',
+          key: 'id'
+        }
       });
       NarrationOfPublication.belongsTo(models.publications, {
         foreignKey: 'publicationId',
-        as: 'publication'
+        as: 'publication',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Publications',
+          key: 'id'
+        }
       });
     }
   }
   NarrationOfPublication.init({
     narrationId: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      references: {
+        model: 'Narrations',
+        key: 'id'
+      }
     },
     publicationId: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      references: {
+        model: 'Publications',
+        key: 'id'
+      }
     },
     notes: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'NarrationOfPublication',
+    primaryKey: ['narrationId', 'authorId']
   });
   return NarrationOfPublication;
 };

@@ -34,12 +34,6 @@ exports.findAll = (req, res) => {
     })
       .then(data => {
         res.send(data);
-      })
-      .catch(err => {
-        res.send({
-          message:
-            err.message || 'Some error occurred while retrieving users.'
-        });
       });
   }
   // otherwise return full data for specified items
@@ -52,12 +46,6 @@ exports.findAll = (req, res) => {
     })
       .then(data => {
         res.send(data);
-      })
-      .catch(err => {
-        res.send({
-          message:
-            err.message || 'Some error occurred while retrieving users.'
-        });
       });
   }
 };
@@ -99,13 +87,6 @@ exports.login = (req, res) => {
         let token = jwt.sign({ data: data },  config.JWT_SECRET ? config.JWT_SECRET : 'secret');
         res.send({ status: 1, data: data, token: token });
       }
-    })
-    .catch(err => {
-      res.send({
-        status: 0,
-        message:
-          err.message || 'Some error occurred while logging in.'
-      });
     });
 };
 
@@ -160,13 +141,6 @@ exports.register = (req, res) => {
             let token = jwt.sign({ data: data }, 'secret');
             res.send({ status: 1, data: data, token: token });
           }
-        })
-        .catch(err => {
-          res.send({
-            status: 0,
-            message:
-             err.msg || 'An error occured, username or email may already be taken.'
-          });
         });
     });
 };
@@ -210,22 +184,17 @@ exports.update = (req, res) => {
   }
   if (!invalidAuth) {
     User.update(requestObj, {where: { username: requestObj.username }})
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'User was updated successfully.'
-        });
-      } else {
-        res.send({
-          message: `Cannot update User with username=${requestObj.username}. Maybe User was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.send({
-        message: err.msg || 'Error updating User with id=' + requestObj.username
+      .then(num => {
+        if (num == 1) {
+          res.send({
+            message: 'User was updated successfully.'
+          });
+        } else {
+          res.send({
+            message: `Cannot update User with username=${requestObj.username}. Maybe User was not found or req.body is empty!`
+          });
+        }
       });
-    });
   }
   else {
     res.send({

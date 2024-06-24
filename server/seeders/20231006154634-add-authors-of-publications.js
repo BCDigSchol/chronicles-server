@@ -5,16 +5,16 @@ module.exports = {
 
     for (const item of importData) {
       await queryInterface.bulkInsert('AuthorOfPublications', [
-          {
-            publicationId: item.publicationId,
-            authorId: item.authorId,
-            publishedHonorific: item.publishedHonorific,
-            publishedName: item.publishedName,
-            notes: item.notes,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          }
-        ],
+        {
+          publicationId: item.publicationId,
+          authorId: item.authorId,
+          publishedHonorific: item.publishedHonorific,
+          publishedName: item.publishedName,
+          notes: item.notes,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ],
       {});
     }
   },

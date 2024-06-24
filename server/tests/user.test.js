@@ -9,10 +9,14 @@ describe('User Endpoints', () => {
   beforeAll(async () => {
     const response = await supertest(app).post('/api/user/login')
       .send({
-        username: process.env.OWNER_USERNAME || 'icamowner',
+        username: process.env.OWNER_USERNAME || 'chroniclesowner',
         password: process.env.OWNER_PASSWORD || 'password'
       });
     token = response.body.token;
+  });
+
+  afterAll(async() => {
+
   });
 
   it('GET /api/user should show all users', async () => {
@@ -45,7 +49,7 @@ describe('User Endpoints', () => {
   });
 
   it('POST /api/user should log a user in', async () => {
-    const username = process.env.OWNER_USERNAME !== undefined ? process.env.OWNER_USERNAME : 'icamowner';
+    const username = process.env.OWNER_USERNAME !== undefined ? process.env.OWNER_USERNAME : 'chroniclesowner';
     const password = process.env.OWNER_PASSWORD !== undefined ? process.env.OWNER_PASSWORD : 'password';
     const res = await requestWithSupertest.post('/api/user/login')
       .send({
@@ -58,7 +62,7 @@ describe('User Endpoints', () => {
   });
 
   it('POST /api/user/login should reject an improper user login', async () => {
-    const username = process.env.OWNER_USERNAME !== undefined ? process.env.OWNER_USERNAME : 'icamowner';
+    const username = process.env.OWNER_USERNAME !== undefined ? process.env.OWNER_USERNAME : 'chroniclesowner';
     const password = 'xyz';
     const res = await requestWithSupertest.post('/api/user/login')
       .send({
@@ -113,7 +117,7 @@ describe('User Endpoints', () => {
   });
 
   it('PUT /api/user/:username should update a user\'s email', async () => {
-    const res = await requestWithSupertest.put('/api/user/TestUser')
+    const res = await requestWithSupertest.put('/api/user/update/TestUser')
       .set('Authorization', `${token}`)
       .send({
         username: 'TestUser',
@@ -124,8 +128,8 @@ describe('User Endpoints', () => {
     expect(res.body).toHaveProperty('message', 'User was updated successfully.');
   });
 
-  it('PUT /api/user/:username should update a user\'s role', async () => {
-    const res = await requestWithSupertest.put('/api/user/TestUser')
+  it('PUT /api/user/update/:username should update a user\'s role', async () => {
+    const res = await requestWithSupertest.put('/api/user/update/TestUser')
       .set('Authorization', `${token}`)
       .send({
         username: 'TestUser',
@@ -136,8 +140,8 @@ describe('User Endpoints', () => {
     expect(res.body).toHaveProperty('message', 'User was updated successfully.');
   });
 
-  it('PUT /api/user/:username should reject unauthorized request', async () => {
-    const res = await requestWithSupertest.put('/api/user/TestUser')
+  it('PUT /api/user/update/:username should reject unauthorized request', async () => {
+    const res = await requestWithSupertest.put('/api/user/update/TestUser')
       .send({
         username: 'TestUser',
         email: 'updated_sample@gmail.com'

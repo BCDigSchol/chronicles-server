@@ -13,27 +13,48 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       GenreOfPublication.belongsTo(models.genres, {
         foreignKey: 'genreId',
-        as: 'genre'
+        as: 'genre',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Genres',
+          key: 'id'
+        }
       });
       GenreOfPublication.belongsTo(models.publications, {
         foreignKey: 'publicationId',
-        as: 'publication'
+        as: 'publication',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Publications',
+          key: 'id'
+        }
       });
     }
   }
   GenreOfPublication.init({
     genreId: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      references: {
+        model: 'Genres',
+        key: 'id'
+      }
     },
     publicationId: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      references: {
+        model: 'Publications',
+        key: 'id'
+      }
     },
     notes: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'GenreOfPublication',
+    primaryKey: ['genreId', 'authorId']
   });
   return GenreOfPublication;
 };
