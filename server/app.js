@@ -18,6 +18,13 @@ app.use(favicon('favicon.ico'));
 app.use(cors({
   origin: '*'
 }));
+
+// set Content-Security-Policy header
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', 'default-src \'self\';');
+  next();
+});
+
 // parse requests of content-type - application/json
 app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
