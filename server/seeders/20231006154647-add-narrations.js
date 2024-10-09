@@ -7,7 +7,7 @@ module.exports = {
       await queryInterface.bulkInsert('Narrations', [
         {
           id: item.id,
-          narration: item.genre,
+          narration: item.narration,
           notes: item.notes,
           createdAt: new Date(),
           updatedAt: new Date()
