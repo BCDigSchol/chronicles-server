@@ -16,47 +16,80 @@ const NarrationOfPublication = db.narrationsOfPublications;
 
 
 // retrieve all items from the database.
-exports.findAll = (req, res) => {
-  let responseData = {
-    publications: [],
-    authors: [],
-    genres: [],
-    narrations: [],
-    authorsofPublications: [],
-    genresOfPublications: [],
-    narrationsOfPublications: []
-  };
+exports.findAll = async (req, res) => {
+  let { format } = req.query;
+  if (!format) {
+    format = 'json';
+  }
+  try {
+    const [
+      publicationData,
+      authorData,
+      genreData,
+      narrationData,
+      authorOfPublicationData,
+      genreOfPublicationData,
+      narrationOfPublicationData
+    ] = await Promise.all([
+      Publication.findAll(),
+      Author.findAll(),
+      Genre.findAll(),
+      Narration.findAll(),
+      AuthorOfPublication.findAll(),
+      GenreOfPublication.findAll(),
+      NarrationOfPublication.findAll()
+    ]);
 
-  Publication.findAll()
-    .then(publicationData => {
-      Author.findAll()
-        .then(authorData => {
-          Genre.findAll()
-            .then(genreData => {
-              Narration.findAll()
-                .then(narrationData => {
-                  AuthorOfPublication.findAll()
-                    .then(authorOfPublicationData => {
-                      GenreOfPublication.findAll()
-                        .then(genreOfPublicationData => {
-                          NarrationOfPublication.findAll()
-                            .then(narrationOfPublicationData => {
-                              responseData = {
-                                publications: publicationData,
-                                authors: authorData,
-                                genres: genreData,
-                                narrations: narrationData,
-                                authorsOfPublications: authorOfPublicationData,
-                                genresOfPublications: genreOfPublicationData,
-                                narrationsOfPublications: narrationOfPublicationData
-                              };
-                              res.send(responseData);
-                            });
-                        });
-                    });
-                });
-            });
-        });
+    const responseData = {
+      publications: publicationData,
+      authors: authorData,
+      genres: genreData,
+      narrations: narrationData,
+      authorsOfPublications: authorOfPublicationData,
+      genresOfPublications: genreOfPublicationData,
+      narrationsOfPublications: narrationOfPublicationData
+    };
+    if (format === 'json') {
+      res.send(responseData);
+    }
+    if (format === 'csv') {
+      const csvData = [];
+      const headers = [
+        'Publication ID',
+        'Publication Title',
+        'Publication Type',
+        'Publication Date',
+        'Author ID',
+        'Author Name',
+        'Genre ID',
+        'Genre Name',
+        'Narration ID',
+        'Narration Name'
+      ];
+      csvData.push(headers.join(','));
+
+      publicationData.forEach((publication) => {
+        const row = [
+          publication.id,
+          publication.title,
+          publication.type,
+          publication.date,
+          publication.authorId,
+          publication.authorName,
+          publication.genreId,
+          publication.genreName,
+          publication.narrationId,
+          publication.narrationName
+        ];
+        csvData.push(row.join(','));
+      });
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.send(csvData.join('\n'));
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || 'Some error occurred while retrieving data.'
     });
-
+  }
 };
