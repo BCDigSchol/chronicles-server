@@ -38,6 +38,7 @@ exports.create = (req, res) => {
   const requestObj = {
     id: req.body.id || null,
     title: req.body.title,
+    date: req.body.date || null,
     subtitle: req.body.subtitle,
     settingName: req.body.settingName,
     settingCategory: req.body.settingCategory,
@@ -64,7 +65,7 @@ exports.findAll = (req, res) => {
     return { limit, offset };
   };
 
-  let { title, subtitle, settingName, settingCategory, period, timeScale, protagonistCategory, protagonistGroupType, page, size, genre, narration, author } = req.query;
+  let { title, subtitle, settingName, settingCategory, period, timeScale, protagonistCategory, protagonistGroupType, page, size, genre, narration, author, startDate, endDate } = req.query;
   let where = {};
   let genreWhere = {};
   let narrationWhere = {};
@@ -102,6 +103,11 @@ exports.findAll = (req, res) => {
   }
   if (author) {
     authorWhere.surname = { [Op.substring]: `%${author}`};
+  }
+  if (startDate && endDate) {
+    where.date = {
+      [Op.between]: [startDate, endDate]
+    };
   }
   
   // if no page or size info is passed, return all items with minimal extra info

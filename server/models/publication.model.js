@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
   Publication.init({
     title: DataTypes.STRING,
     subtitle: DataTypes.STRING,
+    date: DataTypes.INTEGER,
     settingCategory: DataTypes.STRING,
     period: DataTypes.STRING,
     timeScale: DataTypes.STRING,
