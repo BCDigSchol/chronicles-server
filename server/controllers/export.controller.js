@@ -17,79 +17,83 @@ const NarrationOfPublication = db.narrationsOfPublications;
 
 // retrieve all items from the database.
 exports.findAll = async (req, res) => {
-  let { format } = req.query;
+  const tableModelMap = {
+    publications: Publication,
+    authors: Author,
+    genres: Genre,
+    narrations: Narration,
+    authorsOfPublications: AuthorOfPublication,
+    genresOfPublications: GenreOfPublication,
+    narrationsOfPublications: NarrationOfPublication
+  };
+  let { format, table } = req.query;
   if (!format) {
     format = 'json';
   }
+  if (!table) {
+    res.setHeader('Content-Type', 'text/json');
+    res.send({
+      message: 'No table specified. Please specify a table to export.',
+      tables: [
+        'publications',
+        'authors',
+        'genres',
+        'narrations',
+        'authorsOfPublications',
+        'genresOfPublications',
+        'narrationsOfPublications'
+      ]
+    });
+  }
+  if (!['json', 'csv'].includes(format)) {
+    res.setHeader('Content-Type', 'text/json');
+    res.send({
+      message: 'Invalid format specified. Please specify a valid format.',
+      formats: ['json', 'csv']
+    });
+  }
+  const model = tableModelMap[table];
+  if (!model) {
+    res.setHeader('Content-Type', 'text/json');
+    res.send({
+      message: 'Invalid table specified. Please specify a valid table.',
+      tables: [
+        'publications',
+        'authors',
+        'genres',
+        'narrations',
+        'authorsOfPublications',
+        'genresOfPublications',
+        'narrationsOfPublications'
+      ]
+    });
+  }
+  let records;
   try {
-    const [
-      publicationData,
-      authorData,
-      genreData,
-      narrationData,
-      authorOfPublicationData,
-      genreOfPublicationData,
-      narrationOfPublicationData
-    ] = await Promise.all([
-      Publication.findAll(),
-      Author.findAll(),
-      Genre.findAll(),
-      Narration.findAll(),
-      AuthorOfPublication.findAll(),
-      GenreOfPublication.findAll(),
-      NarrationOfPublication.findAll()
-    ]);
-
-    const responseData = {
-      publications: publicationData,
-      authors: authorData,
-      genres: genreData,
-      narrations: narrationData,
-      authorsOfPublications: authorOfPublicationData,
-      genresOfPublications: genreOfPublicationData,
-      narrationsOfPublications: narrationOfPublicationData
-    };
-    if (format === 'json') {
-      res.send(responseData);
-    }
-    if (format === 'csv') {
-      const csvData = [];
-      const headers = [
-        'Publication ID',
-        'Publication Title',
-        'Publication Type',
-        'Publication Date',
-        'Author ID',
-        'Author Name',
-        'Genre ID',
-        'Genre Name',
-        'Narration ID',
-        'Narration Name'
-      ];
-      csvData.push(headers.join(','));
-
-      publicationData.forEach((publication) => {
-        const row = [
-          publication.id,
-          publication.title,
-          publication.type,
-          publication.date,
-          publication.authorId,
-          publication.authorName,
-          publication.genreId,
-          publication.genreName,
-          publication.narrationId,
-          publication.narrationName
-        ];
-        csvData.push(row.join(','));
-      });
-
-      res.setHeader('Content-Type', 'text/csv');
-      res.send(csvData.join('\n'));
-    }
+    records = await model.findAll();
   } catch (error) {
     res.status(500).send({
       message: error.message || 'Some error occurred while retrieving data.'
     });
+    return;
   }
+
+  if (format === 'json') {
+    res.setHeader('Content-Type', 'text/json');
+    res.send(records);
+    return;
+  }
+  // Convert records to CSV format
+  const csvData = [];
+  const headers = Object.keys(records[0].dataValues);
+  csvData.push(headers.join(','));
+  records.forEach(record => {
+    const values = Object.values(record.dataValues);
+    csvData.push(values.join(','));
+  });
+  const csvString = csvData.join('\n');
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', `attachment; filename=${table}.csv`);
+  res.send(csvString);
+  return;
 };
