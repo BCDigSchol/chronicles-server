@@ -86,9 +86,13 @@ exports.findAll = async (req, res) => {
   // Convert records to CSV format
   const csvData = [];
   const headers = Object.keys(records[0].dataValues);
-  csvData.push(headers.join(','));
+  csvData.push(headers.map(h => `"${h.replace(/"/g, '""')}"`).join(','));
   records.forEach(record => {
-    const values = Object.values(record.dataValues);
+    const values = Object.values(record.dataValues).map(value => {
+      // Convert value to string, escape quotes, wrap in quotes
+      const str = value === null || value === undefined ? '' : String(value);
+      return `"${str.replace(/"/g, '""')}"`;
+    });
     csvData.push(values.join(','));
   });
   const csvString = csvData.join('\n');
