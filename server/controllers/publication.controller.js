@@ -127,7 +127,8 @@ exports.findAll = (req, res) => {
       offset,
       distinct: true,
       order: [
-        ['title', 'ASC'],
+        [db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'ASC'],
+        ['id', 'ASC'],
       ],
       include: [{
         model: Genre,
