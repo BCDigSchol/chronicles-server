@@ -126,6 +126,9 @@ exports.findAll = (req, res) => {
       limit,
       offset,
       distinct: true,
+      order: [
+        ['title', 'ASC'],
+      ],
       include: [{
         model: Genre,
         as: 'genres',
